@@ -3,8 +3,18 @@ import SaveUp from './components/SaveUp.vue'
 </script>
 
 <template>
-  <SaveUp />
+  <el-container>
+    <el-header height="20vh">📙记账</el-header>
+    <el-main>
+      <SaveUp />
+    </el-main>
+  </el-container>
+  
 </template>
 
-<style scoped>
+<style scoped lang="less">
+header{
+  font-size: 50px;
+  background-color: #626aef;
+}
 </style>
