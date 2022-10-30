@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
 import dayjs from 'dayjs'
+import api from "@/api/request"
+import { ElMessage } from 'element-plus'
 
 const tagList = ["","success","info","warning","danger"]
-const tableData = reactive([
+let tableData = reactive([
   {
     item: '早饭',
     cost: '0',
@@ -25,9 +27,42 @@ const tableData = reactive([
     memo: '',
   }
 ])
+
+const load = () => {
+  api({
+    url: '/info',
+    method: 'get',
+  }).then((res)=>{
+    const data = res.data;
+    if(data?.result?.length>0) {
+      tableData.length = 0;
+      for(const el of data.result){
+        tableData.push(el)
+      }
+    }
+  })
+}
+
+const submit = () => {
+  api({
+    url: '/submit',
+    method: 'post',
+    data: tableData
+  }).then((res)=>{
+    if (res.data.success) {
+      ElMessage({
+        message: '保存成功.',
+        type: 'success',
+      })
+    }
+  })
+}
+
 const out = (info: any)=>{
   console.log(info)
 }
+
+load();
 </script>
 
 <template>
@@ -40,7 +75,7 @@ const out = (info: any)=>{
         style="width: 100%"
         max-height="300"
       >
-        <el-table-column prop="no" label="No." width="50">
+        <el-table-column prop="no" label="No" width="57">
           <template #default="scope">
             {{scope.$index+1}}
           </template>
@@ -82,7 +117,7 @@ const out = (info: any)=>{
       <el-divider>总消费:{{tableData.map(o=>o.cost.replace(/,/g,"")).reduce((a,b)=>+a + +b,0)}}</el-divider>
       <el-row :gutter="20">
         <el-col :span="12" :offset="0">
-          <el-button color="#626aef" class="btn" size="large" auto-insert-space>保存</el-button>
+          <el-button color="#626aef" class="btn" size="large" auto-insert-space @click="submit">保存</el-button>
         </el-col>
         <el-col :span="12" :offset="0">
           <el-button color="#626aef" class="btn" size="large" auto-insert-space>重置</el-button>
@@ -98,6 +133,7 @@ const out = (info: any)=>{
   height: 100%;
   text-align: center;
   overflow: hidden;
+   font-size: 1.2rem;
 
   .header{
     margin: 10px 0;
@@ -112,5 +148,14 @@ const out = (info: any)=>{
       width: 80%;
     }
   }
+}
+:deep(.cell){
+   font-size: 1.5rem;
+}
+:deep(.el-tag) {
+   font-size: 1.3rem;
+}
+:deep(.el-input),:deep(.el-button),:deep(.el-divider__text) {
+   font-size: 1.2rem;
 }
 </style>

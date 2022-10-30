@@ -4,7 +4,7 @@ import SaveUp from './components/SaveUp.vue'
 
 <template>
   <el-container>
-    <el-header height="20vh">📙记账</el-header>
+    <el-header height="7rem">📙记账</el-header>
     <el-main>
       <SaveUp />
     </el-main>
@@ -16,5 +16,8 @@ import SaveUp from './components/SaveUp.vue'
 header{
   font-size: 50px;
   background-color: #626aef;
+}
+main{
+  padding: 0 ;
 }
 </style>
