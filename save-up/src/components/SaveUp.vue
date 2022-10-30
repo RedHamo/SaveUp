@@ -3,7 +3,6 @@ import { reactive } from 'vue';
 import dayjs from 'dayjs'
 import api from "@/api/request"
 import { ElMessage } from 'element-plus'
-
 const tagList = ["","success","info","warning","danger"]
 let tableData = reactive([
   {
@@ -27,7 +26,10 @@ let tableData = reactive([
     memo: '',
   }
 ])
-
+let msg=reactive({
+  status: '',
+  msg: ''
+})
 const load = () => {
   api({
     url: '/info',
@@ -40,7 +42,14 @@ const load = () => {
         tableData.push(el)
       }
     }
-  })
+    
+    msg.msg="加载成功"
+      msg.status='success'
+      setTimeout(() => {
+        msg.msg=""
+        msg.status=''
+      },3000)
+    })
 }
 
 const submit = () => {
@@ -50,10 +59,12 @@ const submit = () => {
     data: tableData
   }).then((res)=>{
     if (res.data.success) {
-      ElMessage({
-        message: '保存成功.',
-        type: 'success',
-      })
+      msg.msg="保存成功"
+      msg.status='success'
+      setTimeout(() => {
+        msg.msg=""
+        msg.status=''
+      },3000)
     }
   })
 }
@@ -67,6 +78,7 @@ load();
 
 <template>
   <div class="save-up">
+    <el-alert :title="msg.msg" :type="msg.status" :closable="false" show-icon />
     <div class="header">{{dayjs().format("YYYY-MM-DD")}}消费</div>
     <!-- {{tableData}} -->
     <div class="body">
@@ -117,10 +129,10 @@ load();
       <el-divider>总消费:{{tableData.map(o=>o.cost.replace(/,/g,"")).reduce((a,b)=>+a + +b,0)}}</el-divider>
       <el-row :gutter="20">
         <el-col :span="12" :offset="0">
-          <el-button color="#626aef" class="btn" size="large" auto-insert-space @click="submit">保存</el-button>
+          <el-button color="#626aef" class="btn" size="large" auto-insert-space  @click="submit">保存</el-button>
         </el-col>
         <el-col :span="12" :offset="0">
-          <el-button color="#626aef" class="btn" size="large" auto-insert-space>重置</el-button>
+          <el-button color="#626aef" class="btn" size="large" auto-insert-space  @click="load">重新加载</el-button>
         </el-col>
       </el-row>
     </div>

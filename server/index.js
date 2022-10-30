@@ -43,7 +43,7 @@ app.use(cors());
 }
 // 创建数据池
 const pool  = mysql.createPool({
-	host     : '127.0.0.1',   // 数据库地址
+	host     : '192.168.3.3',   // 数据库地址
 	user     : 'root',    // 数据库用户
 	password : '123456',   // 数据库密码
 	database : 'save_up'  // 选中数据库
