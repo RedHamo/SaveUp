@@ -2,7 +2,6 @@
 import { reactive } from 'vue';
 import dayjs from 'dayjs'
 import api from "@/api/request"
-import { ElMessage } from 'element-plus'
 const tagList = ["","success","info","warning","danger"]
 let tableData = reactive([
   {
@@ -106,11 +105,6 @@ load();
             <el-input 
               v-model="tableData[scope.$index].cost" 
               size="small" 
-              :formatter="(value:String) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-              :parser="(value:String) => {
-                if(value=='') return '0'
-                return value.replace(/[^\d]/g, '').replace(/^0*([\d]*$)/, '$1')
-              }"
               maxlength="6"
               class="cost-input"
             ></el-input>
