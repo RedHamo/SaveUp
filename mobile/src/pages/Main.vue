@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, UnwrapRef } from 'vue'
+import { reactive, ref } from 'vue'
 import FooterBarVue from '../components/FooterBar.vue';
 import { Divider } from 'vant';
 import dayjs from 'dayjs'
@@ -24,15 +24,15 @@ const columns = [
 interface DataItem {
   key: string;
   item: string;
-  cost: number;
+  cost: string;
   memo: string;
 }
 const data: DataItem[] = [];
 
-data.push({ key: "1", item: "早饭", cost: 0, memo: "" })
-data.push({ key: "2", item: "午饭", cost: 0, memo: "" })
-data.push({ key: "3", item: "晚饭", cost: 0, memo: "" })
-data.push({ key: "4", item: "其他", cost: 0, memo: "" })
+data.push({ key: "1", item: "早饭", cost: "", memo: "" })
+data.push({ key: "2", item: "午饭", cost: "", memo: "" })
+data.push({ key: "3", item: "晚饭", cost: "", memo: "" })
+data.push({ key: "4", item: "其他", cost: "", memo: "" })
 
 const dataSource = ref(data);
 
@@ -57,14 +57,20 @@ const edit = (row: string, column: string) => {
   editCellData.column = column;
   setTimeout(() => {
     document.getElementById(column+row)?.focus()
-  },300)
+  },200)
 };
 
 const save = (row: string, column: string) => {
   let index = dataSource.value.findIndex(item => row === item.key);
   let params = {[column]: editCellData.data};
   Object.assign(dataSource.value[index], params)
+  
   editCellData.data = null;
+  if(column=="cost"){
+    setTimeout(() => {
+      edit(row, "memo")
+    },200)
+  }
 };
 
 const cancel = () => {
